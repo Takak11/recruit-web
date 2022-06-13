@@ -28,13 +28,10 @@
   import { CollapseContainer } from '/@/components/Container';
   import { CropperAvatar } from '/@/components/Cropper';
 
-  import { useMessage } from '/@/hooks/web/useMessage';
-
   import headerImg from '/@/assets/images/header.jpg';
-  import { accountInfoApi } from '/@/api/demo/account';
-  import { baseSetschemas } from './data';
   import { useUserStore } from '/@/store/modules/user';
   import { uploadApi } from '/@/api/sys/upload';
+  import { baseSetschemas } from './data';
 
   export default defineComponent({
     components: {
@@ -46,7 +43,6 @@
       CropperAvatar,
     },
     setup() {
-      const { createMessage } = useMessage();
       const userStore = useUserStore();
 
       const [register, { setFieldsValue }] = useForm({
@@ -56,8 +52,8 @@
       });
 
       onMounted(async () => {
-        const data = await accountInfoApi();
-        setFieldsValue(data);
+        const userInfo = userStore.getUserInfo;
+        setFieldsValue(userInfo);
       });
 
       const avatar = computed(() => {
@@ -76,9 +72,7 @@
         register,
         uploadApi: uploadApi as any,
         updateAvatar,
-        handleSubmit: () => {
-          createMessage.success('更新成功！');
-        },
+        handleSubmit: () => {},
       };
     },
   });

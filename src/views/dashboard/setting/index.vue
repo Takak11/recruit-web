@@ -21,8 +21,6 @@
 
   import BaseSetting from './BaseSetting.vue';
   import SecureSetting from './SecureSetting.vue';
-  import AccountBind from './AccountBind.vue';
-  import MsgNotify from './MsgNotify.vue';
 
   export default defineComponent({
     components: {
@@ -31,8 +29,6 @@
       TabPane: Tabs.TabPane,
       BaseSetting,
       SecureSetting,
-      AccountBind,
-      MsgNotify,
     },
     setup() {
       return {

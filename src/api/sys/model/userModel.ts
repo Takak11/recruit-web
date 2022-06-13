@@ -26,6 +26,7 @@ export interface GetUserInfoModel {
   username: string;
   // 真实名字
   name: string;
+  mail: string;
   // 头像
   avatar: string;
   age: number;

@@ -31,6 +31,7 @@ export interface ErrorLogInfo {
 }
 
 export interface UserInfo {
+  mail: string;
   username: string;
   name: string;
   age: number;

@@ -1,85 +1,59 @@
 <template>
-  <PageWrapper title="详情组件示例">
-    <Description
-      title="基础示例"
-      :collapseOptions="{ canExpand: true, helpMessage: 'help me' }"
-      :column="3"
-      :data="mockData"
-      :schema="schema"
-    />
-
+  <PageWrapper title="用户个人信息">
     <Description
       class="mt-4"
-      title="垂直示例"
+      title="个人信息"
       layout="vertical"
-      :collapseOptions="{ canExpand: true, helpMessage: 'help me' }"
+      :collapseOptions="{ canExpand: true, helpMessage: '详情请查看表格内容' }"
       :column="2"
-      :data="mockData"
+      :data="userInformation"
       :schema="schema"
     />
-
-    <Description @register="register" class="mt-4" />
-    <Description @register="register1" class="mt-4" />
   </PageWrapper>
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { Description, DescItem, useDescription } from '/@/components/Description/index';
+  import { getUserInfo } from '/@/api/sys/user';
+  import { Description, DescItem } from '/@/components/Description/index';
   import { PageWrapper } from '/@/components/Page';
+  import { useUserStore } from '/@/store/modules/user';
 
-  const mockData: Recordable = {
-    username: 'test',
-    nickName: 'VB',
-    age: '123',
-    phone: '15695909xxx',
-    email: '190848757@qq.com',
-    addr: '厦门市思明区',
-    sex: '男',
-    certy: '3504256199xxxxxxxxx',
-    tag: 'orange',
-  };
   const schema: DescItem[] = [
     {
       field: 'username',
       label: '用户名',
     },
     {
-      field: 'nickName',
+      field: 'name',
       label: '昵称',
-      render: (curVal, data) => {
-        return `${data.username}-${curVal}`;
-      },
     },
     {
-      field: 'phone',
+      field: 'mobile',
       label: '联系电话',
     },
     {
-      field: 'email',
+      field: 'username',
       label: '邮箱',
     },
     {
-      field: 'addr',
-      label: '地址',
+      field: 'age',
+      label: '年龄',
+    },
+    {
+      field: 'sex',
+      label: '性别',
+    },
+    {
+      field: 'expiredDate',
+      label: '登陆状态过期时间',
     },
   ];
   export default defineComponent({
     components: { Description, PageWrapper },
     setup() {
-      const [register] = useDescription({
-        title: 'useDescription',
-        data: mockData,
-        schema: schema,
-      });
-
-      const [register1] = useDescription({
-        title: '无边框',
-        bordered: false,
-        data: mockData,
-        schema: schema,
-      });
-
-      return { mockData, schema, register, register1 };
+      const userStore = useUserStore();
+      const userInformation = userStore.getUserInfo;
+      return { userInformation, schema };
     },
   });
 </script>
