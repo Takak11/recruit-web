@@ -32,7 +32,7 @@
       label: '联系电话',
     },
     {
-      field: 'username',
+      field: 'mail',
       label: '邮箱',
     },
     {
@@ -42,6 +42,9 @@
     {
       field: 'sex',
       label: '性别',
+      render: (data) => {
+        return data === 0 ? '女' : '男';
+      },
     },
     {
       field: 'expiredDate',

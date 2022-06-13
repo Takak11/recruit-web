@@ -15,6 +15,9 @@
   import { BasicForm, useForm } from '/@/components/Form';
 
   import { formSchema } from './pwd.data';
+  import { useUserStore } from '/@/store/modules/user';
+  import { router } from '/@/router';
+  import { PageEnum } from '/@/enums/pageEnum';
   export default defineComponent({
     name: 'ChangePassword',
     components: { BasicForm, PageWrapper },
@@ -27,15 +30,17 @@
       });
 
       async function handleSubmit() {
-        try {
-          const values = await validate();
-          const { passwordOld, passwordNew } = values;
+        const values = await validate();
+        const userStore = useUserStore();
+        const result = await userStore.changePassword({
+          currentPassword: values.passwordOld,
+          newPassword: values.passwordNew,
+        });
+        if (result === true) {
+          userStore.logout(true);
 
-          // TODO custom api
-          console.log(passwordOld, passwordNew);
-          // const { router } = useRouter();
-          // router.push(pageEnum.BASE_LOGIN);
-        } catch (error) {}
+          router.push(PageEnum.BASE_LOGIN);
+        }
       }
 
       return { register, resetFields, handleSubmit };

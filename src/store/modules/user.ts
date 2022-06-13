@@ -6,8 +6,14 @@ import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
 import { TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
-import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
-import { getUserInfo, loginApi } from '/@/api/sys/user';
+import { GetUserInfoModel, LoginParams, UpdatePassworParams } from '/@/api/sys/model/userModel';
+import {
+  changePassword,
+  getUserInfo,
+  loginApi,
+  updateUserInfo,
+  UpdateUserInfo,
+} from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -90,18 +96,40 @@ export const useUserStore = defineStore({
      * @description: logout
      */
     async logout(goLogin = false) {
-      if (this.getToken) {
-        try {
-          await doLogout();
-        } catch {
-          console.log('注销Token失败');
-        }
-      }
       this.setToken(undefined);
       this.setUserInfo(null);
       goLogin && router.push(PageEnum.BASE_LOGIN);
     },
+    async updateUserInfo(
+      params: UpdateUserInfo & {
+        mode?: ErrorMessageMode;
+      },
+    ) {
+      await updateUserInfo(params);
+      const info = await this.getUserInfoAction();
+      this.setUserInfo(info);
+      const { createConfirm } = useMessage();
+      createConfirm({
+        iconType: 'success',
+        title: '成功',
+        content: '更新用户信息成功！',
+      });
+    },
 
+    async changePassword(
+      params: UpdatePassworParams & {
+        mode?: ErrorMessageMode;
+      },
+    ): Promise<boolean | null> {
+      try {
+        const data = await changePassword(params);
+        const result = data;
+
+        return result;
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
     /**
      * @description: Confirm before logging out
      */

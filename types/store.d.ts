@@ -35,7 +35,7 @@ export interface UserInfo {
   username: string;
   name: string;
   age: number;
-  sex: string;
+  sex: number;
   mobile: string;
   avatar: string;
   expiredDate: string;

@@ -27,6 +27,8 @@
   import { secureSettingList } from './data';
   import { useUserStore } from '/@/store/modules/user';
   import { router } from '/@/router';
+  import { useTabs } from '/@/hooks/web/useTabs';
+  import { useMultipleTabStore } from '/@/store/modules/multipleTab';
 
   export default defineComponent({
     components: { CollapseContainer, List, ListItem: List.Item, ListItemMeta: List.Item.Meta },
@@ -34,18 +36,21 @@
       const userStore = useUserStore();
       const info = userStore.getUserInfo;
       secureSettingList[1].description = info.mobile;
-      secureSettingList[2].description = info.username;
+      secureSettingList[2].description = info.mail;
 
+      const { refreshPage } = useTabs();
       async function handleModify(title: string) {
         if (title === '账户密码') {
           router.push('password');
         } else {
-          router.push(self);
+          const tabStore = useMultipleTabStore();
+          await tabStore.refreshPage(router);
         }
       }
       return {
         list: secureSettingList,
         handleModify,
+        refreshPage,
       };
     },
   });

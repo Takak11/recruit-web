@@ -26,7 +26,7 @@ export const settingList = [
 // 基础设置 form
 export const baseSetschemas: FormSchema[] = [
   {
-    field: 'username',
+    field: 'mail',
     component: 'Input',
     label: '邮箱',
     colProps: { span: 25 },

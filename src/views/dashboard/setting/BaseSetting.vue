@@ -45,7 +45,7 @@
     setup() {
       const userStore = useUserStore();
 
-      const [register, { setFieldsValue }] = useForm({
+      const [register, { setFieldsValue, getFieldsValue }] = useForm({
         labelWidth: 120,
         schemas: baseSetschemas,
         showActionButtonGroup: false,
@@ -72,7 +72,10 @@
         register,
         uploadApi: uploadApi as any,
         updateAvatar,
-        handleSubmit: () => {},
+        handleSubmit: () => {
+          const values = getFieldsValue();
+          userStore.updateUserInfo(values);
+        },
       };
     },
   });

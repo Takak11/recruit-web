@@ -5,7 +5,17 @@ export interface LoginParams {
   username: string;
   password: string;
 }
-
+export interface UpdatePassworParams {
+  currentPassword: string;
+  newPassword: string;
+}
+export interface UpdateUserParams {
+  age: number;
+  mail: string;
+  mobile: string;
+  name: string;
+  sex: number;
+}
 export interface RoleInfo {
   roleName: string;
   value: string;
@@ -30,7 +40,7 @@ export interface GetUserInfoModel {
   // 头像
   avatar: string;
   age: number;
-  sex: string;
+  sex: number;
   mobile: string;
   expiredDate: string;
   // 介绍
