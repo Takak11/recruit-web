@@ -10,25 +10,33 @@ const dashboard: AppRouteModule = {
   redirect: '/dashboard/analysis',
   meta: {
     orderNo: 10,
-    icon: 'ion:grid-outline',
+    icon: 'ant-design:user-outlined',
     title: t('routes.dashboard.dashboard'),
   },
   children: [
     {
-      path: 'analysis',
-      name: 'Analysis',
-      component: () => import('/@/views/dashboard/analysis/index.vue'),
+      path: 'info',
+      name: 'info',
+      component: () => import('/@/views/dashboard/desc/index.vue'),
       meta: {
         // affix: true,
-        title: t('routes.dashboard.analysis'),
+        title: t('routes.dashboard.info'),
       },
     },
     {
-      path: 'workbench',
-      name: 'Workbench',
-      component: () => import('/@/views/dashboard/workbench/index.vue'),
+      path: 'setting',
+      name: 'setting',
+      component: () => import('/@/views/dashboard/setting/index.vue'),
       meta: {
-        title: t('routes.dashboard.workbench'),
+        title: t('routes.dashboard.setting'),
+      },
+    },
+    {
+      path: 'password',
+      name: 'password',
+      component: () => import('/@/views/dashboard/password/index.vue'),
+      meta: {
+        title: t('routes.dashboard.password'),
       },
     },
   ],

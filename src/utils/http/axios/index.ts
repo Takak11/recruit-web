@@ -32,57 +32,56 @@ const transform: AxiosTransform = {
    */
   transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
     const { t } = useI18n();
-    const { isTransformResponse, isReturnNativeResponse } = options;
-    // 是否返回原生响应头 比如：需要获取响应头时使用该属性
-    if (isReturnNativeResponse) {
-      return res;
-    }
-    // 不进行任何处理，直接返回
-    // 用于页面代码可能需要直接获取code，data，message这些信息时开启
-    if (!isTransformResponse) {
-      return res.data;
-    }
-    // 错误的时候返回
-
-    const { data } = res;
-    if (!data) {
-      // return '[HTTP] Request has no return value';
-      throw new Error(t('sys.api.apiRequestFailed'));
-    }
-    //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    const { code, result, message } = data;
-
+    const resData = res.data;
+    const { code, data, message, type } = resData;
     // 这里逻辑可以根据项目进行修改
-    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
-    if (hasSuccess) {
-      return result;
+    if (code === ResultEnum.ERROR) {
+      createErrorModal({ title: t('sys.api.errorTip'), content: message });
+      Promise.reject(new Error(message));
+      return resData;
     }
-
-    // 在此处根据自己项目的实际情况对不同的code执行不同的操作
-    // 如果不希望中断当前请求，请return数据，否则直接抛出异常即可
-    let timeoutMsg = '';
-    switch (code) {
-      case ResultEnum.TIMEOUT:
-        timeoutMsg = t('sys.api.timeoutMessage');
-        const userStore = useUserStoreWithOut();
-        userStore.setToken(undefined);
-        userStore.logout(true);
-        break;
-      default:
-        if (message) {
-          timeoutMsg = message;
+    const hasSuccess = resData && Reflect.has(resData, 'code') && code === ResultEnum.SUCCESS;
+    if (!hasSuccess) {
+      if (message) {
+        // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
+        if (options.errorMessageMode === 'modal') {
+          createErrorModal({ title: t('sys.api.errorTip'), content: message });
+          return resData;
+        } else if (options.errorMessageMode === 'message') {
+          createMessage.error(message);
+          return resData;
         }
+      }
+      Promise.reject(new Error(message));
+      return resData;
     }
 
-    // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
-    // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
-    if (options.errorMessageMode === 'modal') {
-      createErrorModal({ title: t('sys.api.errorTip'), content: timeoutMsg });
-    } else if (options.errorMessageMode === 'message') {
-      createMessage.error(timeoutMsg);
+    // 接口请求成功，直接返回结果
+    if (code === ResultEnum.SUCCESS) {
+      return data;
     }
-
-    throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'));
+    // 接口请求错误，统一提示错误信息
+    if (code === ResultEnum.ERROR) {
+      if (message) {
+        createMessage.error(message);
+        Promise.reject(new Error(message));
+      } else {
+        const errorMessage = t('sys.api.errorMessage');
+        createMessage.error(errorMessage);
+        Promise.reject(new Error(errorMessage));
+        return resData;
+      }
+    }
+    // 登录超时
+    if (code === ResultEnum.TIMEOUT) {
+      const timeoutMsg = t('sys.api.timeoutMessage');
+      createErrorModal({
+        title: t('sys.api.operationFailed'),
+        content: timeoutMsg,
+      });
+      Promise.reject(new Error(timeoutMsg));
+      return resData;
+    }
   },
 
   // 请求之前处理config
@@ -209,7 +208,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes
         // authentication schemes，e.g: Bearer
         // authenticationScheme: 'Bearer',
-        authenticationScheme: '',
+        authenticationScheme: 'Bearer',
         timeout: 10 * 1000,
         // 基础接口地址
         // baseURL: globSetting.apiUrl,
