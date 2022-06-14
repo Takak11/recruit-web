@@ -22,6 +22,7 @@ import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { isArray } from '/@/utils/is';
 import { h } from 'vue';
+import { useMultipleTabStore } from './multipleTab';
 
 interface UserState {
   userInfo: Nullable<UserInfo>;
@@ -89,7 +90,9 @@ export const useUserStore = defineStore({
       if (!this.getToken) return null;
       const userInfo = await getUserInfo();
 
+      userInfo.avatar = 'http://localhost:8088/api/recruit/common/rest/download/1';
       this.setUserInfo(userInfo);
+      console.log(userInfo);
       return userInfo;
     },
     /**
@@ -108,11 +111,15 @@ export const useUserStore = defineStore({
       await updateUserInfo(params);
       const info = await this.getUserInfoAction();
       this.setUserInfo(info);
-      const { createConfirm } = useMessage();
-      createConfirm({
+      const { createSuccessModal } = useMessage();
+      createSuccessModal({
         iconType: 'success',
         title: '成功',
         content: '更新用户信息成功！',
+        onOk: () => {
+          const tabStore = useMultipleTabStore();
+          tabStore.refreshPage(router);
+        },
       });
     },
 

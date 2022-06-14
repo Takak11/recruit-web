@@ -5,14 +5,14 @@ const IFrame = () => import('/@/views/sys/iframe/FrameBlank.vue');
 import { t } from '/@/hooks/web/useI18n';
 
 const iframe: AppRouteModule = {
-  path: '/frame',
+  path: '/project',
   name: 'Frame',
   component: LAYOUT,
-  redirect: '/frame/doc',
+  redirect: '/project/doc',
   meta: {
-    orderNo: 1000,
+    orderNo: 10,
     icon: 'ion:tv-outline',
-    title: t('routes.demo.iframe.frame'),
+    title: t('routes.demo.iframe.overview'),
   },
 
   children: [
@@ -21,25 +21,9 @@ const iframe: AppRouteModule = {
       name: 'Doc',
       component: IFrame,
       meta: {
-        frameSrc: 'https://vvbin.cn/doc-next/',
+        icon: 'ant-design:file-outlined',
+        frameSrc: 'http://localhost:8088/doc.html',
         title: t('routes.demo.iframe.doc'),
-      },
-    },
-    {
-      path: 'antv',
-      name: 'Antv',
-      component: IFrame,
-      meta: {
-        frameSrc: 'https://2x.antdv.com/docs/vue/introduce-cn/',
-        title: t('routes.demo.iframe.antv'),
-      },
-    },
-    {
-      path: 'https://vvbin.cn/doc-next/',
-      name: 'DocExternal',
-      component: IFrame,
-      meta: {
-        title: t('routes.demo.iframe.docExternal'),
       },
     },
   ],

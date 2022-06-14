@@ -110,9 +110,9 @@ export default {
     tabsForm: '标签页+多级field',
   },
   iframe: {
-    frame: '外部页面',
+    overview: '项目总览',
     antv: 'antVue文档(内嵌)',
-    doc: '项目文档(内嵌)',
+    doc: '项目文档',
     docExternal: '项目文档(外链)',
   },
   level: { level: '多级菜单' },

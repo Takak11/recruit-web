@@ -20,3 +20,15 @@ export function uploadApi(
     params,
   );
 }
+export function uploadAvatar(
+  params: UploadFileParams,
+  onUploadProgress: (progressEvent: ProgressEvent) => void,
+) {
+  return defHttp.uploadFile<UploadApiResult>(
+    {
+      url: uploadUrl,
+      onUploadProgress,
+    },
+    params,
+  );
+}

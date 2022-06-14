@@ -32,6 +32,7 @@
   import { useUserStore } from '/@/store/modules/user';
   import { uploadApi } from '/@/api/sys/upload';
   import { baseSetschemas } from './data';
+  import { userInfo } from 'os';
 
   export default defineComponent({
     components: {
