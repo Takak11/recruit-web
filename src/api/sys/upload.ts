@@ -5,6 +5,9 @@ import { useGlobSetting } from '/@/hooks/setting';
 
 const { uploadUrl = '' } = useGlobSetting();
 
+enum Api {
+  UploadAvatar = '/basic-api/api/recruit/user/avatar',
+}
 /**
  * @description: Upload interface
  */
@@ -26,7 +29,7 @@ export function uploadAvatar(
 ) {
   return defHttp.uploadFile<UploadApiResult>(
     {
-      url: uploadUrl,
+      url: Api.UploadAvatar,
       onUploadProgress,
     },
     params,

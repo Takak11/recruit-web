@@ -8,7 +8,7 @@
         <div class="change-avatar">
           <div class="mb-2">头像</div>
           <CropperAvatar
-            :uploadApi="uploadApi"
+            :uploadApi="uploadAvatar"
             :value="avatar"
             btnText="更换头像"
             :btnProps="{ preIcon: 'ant-design:cloud-upload-outlined' }"
@@ -30,9 +30,13 @@
 
   import headerImg from '/@/assets/images/header.jpg';
   import { useUserStore } from '/@/store/modules/user';
-  import { uploadApi } from '/@/api/sys/upload';
+  import { uploadApi, uploadAvatar } from '/@/api/sys/upload';
   import { baseSetschemas } from './data';
   import { userInfo } from 'os';
+  import { useModal } from '/@/components/Modal';
+  import avatar from 'ant-design-vue/lib/avatar';
+  import { AvatarEnum } from '/@/enums/avatarPrefixEnum';
+  import { useMessage } from '/@/hooks/web/useMessage';
 
   export default defineComponent({
     components: {
@@ -58,7 +62,7 @@
       });
 
       const avatar = computed(() => {
-        const { avatar } = userStore.getUserInfo;
+        let { avatar } = userStore.getUserInfo;
         return avatar || headerImg;
       });
 
@@ -66,16 +70,25 @@
         const userinfo = userStore.getUserInfo;
         userinfo.avatar = src;
         userStore.setUserInfo(userinfo);
+        return;
       }
 
       return {
         avatar,
         register,
-        uploadApi: uploadApi as any,
+        uploadAvatar: uploadAvatar as any,
         updateAvatar,
         handleSubmit: () => {
           const values = getFieldsValue();
-          userStore.updateUserInfo(values);
+          const { name, sex, age, mail, mobile } = values;
+
+          userStore.updateUserInfo({
+            name: name,
+            sex: sex,
+            age: age,
+            mail: mail,
+            mobile: mobile,
+          });
         },
       };
     },

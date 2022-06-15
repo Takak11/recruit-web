@@ -188,6 +188,8 @@
             const result = await uploadApi({ name: 'file', file: blob, filename });
             emit('uploadSuccess', { source: previewSource.value, data: result.data });
             closeModal();
+
+            return result;
           } finally {
             setModalProps({ confirmLoading: false });
           }

@@ -51,7 +51,7 @@ export function changePassword(params: UpdatePassworParams, mode: ErrorMessageMo
 }
 
 export function updateUserInfo(params: UpdateUserParams, mode: ErrorMessageMode = 'modal') {
-  return defHttp.post<void>(
+  return defHttp.post<boolean>(
     {
       url: Api.UpdateUserInfo,
       params,

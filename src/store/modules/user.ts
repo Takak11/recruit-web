@@ -6,14 +6,13 @@ import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
 import { TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
-import { GetUserInfoModel, LoginParams, UpdatePassworParams } from '/@/api/sys/model/userModel';
 import {
-  changePassword,
-  getUserInfo,
-  loginApi,
-  updateUserInfo,
-  UpdateUserInfo,
-} from '/@/api/sys/user';
+  GetUserInfoModel,
+  LoginParams,
+  UpdatePassworParams,
+  UpdateUserParams,
+} from '/@/api/sys/model/userModel';
+import { changePassword, getUserInfo, loginApi, updateUserInfo } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -23,6 +22,7 @@ import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { isArray } from '/@/utils/is';
 import { h } from 'vue';
 import { useMultipleTabStore } from './multipleTab';
+import { AvatarEnum } from '/@/enums/avatarPrefixEnum';
 
 interface UserState {
   userInfo: Nullable<UserInfo>;
@@ -89,10 +89,12 @@ export const useUserStore = defineStore({
     async getUserInfoAction(): Promise<UserInfo | null> {
       if (!this.getToken) return null;
       const userInfo = await getUserInfo();
-
-      userInfo.avatar = 'http://localhost:8088/api/recruit/common/rest/download/1';
+      const avatarId = userInfo.avatar;
+      const avatar = AvatarEnum.Prefix + avatarId;
+      if (userInfo.avatar !== null) {
+        userInfo.avatar = avatar;
+      }
       this.setUserInfo(userInfo);
-      console.log(userInfo);
       return userInfo;
     },
     /**
@@ -104,23 +106,32 @@ export const useUserStore = defineStore({
       goLogin && router.push(PageEnum.BASE_LOGIN);
     },
     async updateUserInfo(
-      params: UpdateUserInfo & {
+      params: UpdateUserParams & {
         mode?: ErrorMessageMode;
       },
     ) {
-      await updateUserInfo(params);
+      const result = await updateUserInfo(params);
       const info = await this.getUserInfoAction();
       this.setUserInfo(info);
-      const { createSuccessModal } = useMessage();
-      createSuccessModal({
-        iconType: 'success',
-        title: '成功',
-        content: '更新用户信息成功！',
-        onOk: () => {
-          const tabStore = useMultipleTabStore();
-          tabStore.refreshPage(router);
-        },
-      });
+
+      const { createSuccessModal, createWarningModal } = useMessage();
+      if (result === true) {
+        createSuccessModal({
+          iconType: 'success',
+          title: '成功',
+          content: '更新用户信息成功！',
+          onOk: () => {
+            const tabStore = useMultipleTabStore();
+            tabStore.refreshPage(router);
+          },
+        });
+      } else {
+        createWarningModal({
+          iconType: 'warning',
+          title: '提示',
+          content: '用户信息无更新时，请不要点击更新',
+        });
+      }
     },
 
     async changePassword(
