@@ -12,7 +12,7 @@ import {
   UpdatePassworParams,
   UpdateUserParams,
 } from '/@/api/sys/model/userModel';
-import { changePassword, getUserInfo, loginApi, updateUserInfo } from '/@/api/sys/user';
+import { changePassword, getUserInfo, loginApi, logoutApi, updateUserInfo } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -48,11 +48,10 @@ export const useUserStore = defineStore({
   actions: {
     setToken(info: string | undefined) {
       this.token = info ? info : ''; // for null or undefined value
-      setAuthCache(TOKEN_KEY, info);
+      setAuthCache(TOKEN_KEY, this.getToken);
     },
     setUserInfo(info: UserInfo | null) {
       this.userInfo = info;
-      setAuthCache(USER_INFO_KEY, info);
     },
     resetState() {
       this.userInfo = null;
@@ -74,6 +73,7 @@ export const useUserStore = defineStore({
 
         // save token
         this.setToken(token);
+        setAuthCache(TOKEN_KEY, this.getToken);
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);
@@ -101,6 +101,7 @@ export const useUserStore = defineStore({
      * @description: logout
      */
     async logout(goLogin = false) {
+      await logoutApi();
       this.setToken(undefined);
       this.setUserInfo(null);
       goLogin && router.push(PageEnum.BASE_LOGIN);

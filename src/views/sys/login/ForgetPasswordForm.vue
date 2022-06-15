@@ -10,8 +10,8 @@
         />
       </FormItem>
 
-      <FormItem name="mobile" class="enter-x">
-        <Input size="large" v-model:value="formData.mobile" :placeholder="t('sys.login.mobile')" />
+      <FormItem name="mail" class="enter-x">
+        <Input size="large" v-model:value="formData.mail" :placeholder="t('sys.login.email')" />
       </FormItem>
       <FormItem name="sms" class="enter-x">
         <CountdownInput
@@ -38,7 +38,7 @@
   import { Form, Input, Button } from 'ant-design-vue';
   import { CountdownInput } from '/@/components/CountDown';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import { useLoginState, useFormRules, LoginStateEnum } from './useLogin';
+  import { useLoginState, useFormRules, LoginStateEnum, useFormValid } from './useLogin';
 
   const FormItem = Form.Item;
   const { t } = useI18n();
@@ -50,15 +50,16 @@
 
   const formData = reactive({
     account: '',
-    mobile: '',
+    mail: '',
     sms: '',
   });
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.RESET_PASSWORD);
 
+  const { validForm } = useFormValid(formRef);
   async function handleReset() {
-    const form = unref(formRef);
-    if (!form) return;
-    await form.resetFields();
+    const data = await validForm();
+    if (!data) return;
+    console.log(data);
   }
 </script>

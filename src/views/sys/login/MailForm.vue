@@ -2,11 +2,11 @@
   <template v-if="getShow">
     <LoginFormTitle class="enter-x" />
     <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
-      <FormItem name="mobile" class="enter-x">
+      <FormItem name="mail" class="enter-x">
         <Input
           size="large"
-          v-model:value="formData.mobile"
-          :placeholder="t('sys.login.mobile')"
+          v-model:value="formData.mail"
+          :placeholder="t('sys.login.email')"
           class="fix-auto-fill"
         />
       </FormItem>

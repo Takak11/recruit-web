@@ -71,6 +71,7 @@
       }
 
       function handleClearAndRedo() {
+        userStore.logout();
         localStorage.clear();
         appStore.resetAllState();
         permissionStore.resetState();

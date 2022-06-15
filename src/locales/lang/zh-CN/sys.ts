@@ -60,7 +60,7 @@ export default {
   login: {
     backSignIn: '返回',
     signInFormTitle: '登录',
-    mobileSignInFormTitle: '手机登录',
+    mobileSignInFormTitle: '邮箱登录',
     qrSignInFormTitle: '二维码登录',
     signUpFormTitle: '注册',
     forgetFormTitle: '重置密码',
@@ -82,17 +82,20 @@ export default {
 
     // placeholder
     accountPlaceholder: '请输入账号',
+    namePlaceholder: '请输入昵称',
     passwordPlaceholder: '请输入密码',
     smsPlaceholder: '请输入验证码',
     mobilePlaceholder: '请输入手机号码',
+    mailPlaceholder: '请输入邮箱号码',
     policyPlaceholder: '勾选后才能注册',
     diffPwd: '两次输入密码不一致',
 
     userName: '账号',
+    name: '昵称',
     password: '密码',
     confirmPassword: '确认密码',
     email: '邮箱',
-    smsCode: '短信验证码',
+    smsCode: '邮箱验证码',
     mobile: '手机号码',
   },
 };

@@ -2,12 +2,12 @@
   <template v-if="getShow">
     <LoginFormTitle class="enter-x" />
     <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
-      <FormItem name="account" class="enter-x">
+      <FormItem name="name" class="enter-x">
         <Input
           class="fix-auto-fill"
           size="large"
-          v-model:value="formData.account"
-          :placeholder="t('sys.login.userName')"
+          v-model:value="formData.name"
+          :placeholder="t('sys.login.name')"
         />
       </FormItem>
       <FormItem name="mobile" class="enter-x">
@@ -15,6 +15,14 @@
           size="large"
           v-model:value="formData.mobile"
           :placeholder="t('sys.login.mobile')"
+          class="fix-auto-fill"
+        />
+      </FormItem>
+      <FormItem name="mail" class="enter-x">
+        <Input
+          size="large"
+          v-model:value="formData.mail"
+          :placeholder="t('sys.login.email')"
           class="fix-auto-fill"
         />
       </FormItem>
@@ -83,10 +91,11 @@
   const loading = ref(false);
 
   const formData = reactive({
-    account: '',
+    name: '',
     password: '',
     confirmPassword: '',
     mobile: '',
+    mail: '',
     sms: '',
     policy: false,
   });
