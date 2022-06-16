@@ -29,6 +29,7 @@
       <FormItem name="sms" class="enter-x">
         <CountdownInput
           size="large"
+          :sendCodeApi="sendCode"
           class="fix-auto-fill"
           v-model:value="formData.sms"
           :placeholder="t('sys.login.smsCode')"
@@ -81,6 +82,8 @@
   import { CountdownInput } from '/@/components/CountDown';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+  import { useSMSStore } from '/@/store/modules/sms';
+  import { useMessage } from '/@/hooks/web/useMessage';
 
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
@@ -102,12 +105,35 @@
 
   const { getFormRules } = useFormRules(formData);
   const { validForm } = useFormValid(formRef);
+  const { createSuccessModal, createErrorModal } = useMessage();
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.REGISTER);
+  const smsStore = useSMSStore();
 
+  async function sendCode() {
+    if (!formData.mail) {
+      createErrorModal({
+        title: '错误',
+        content: '请填写邮箱后发送',
+      });
+    }
+    const mail = formData.mail;
+    await smsStore.getSMSAction({
+      mail: mail,
+    });
+
+    return true;
+  }
   async function handleRegister() {
     const data = await validForm();
     if (!data) return;
     console.log(data);
+    console.log(smsStore.$state.sms);
+    if (data.sms != smsStore.$state.sms) {
+      createErrorModal({
+        title: '错误',
+        content: '验证码错误，请检查后重新提交',
+      });
+    }
   }
 </script>

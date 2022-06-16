@@ -49,3 +49,16 @@ export interface BeforeMiniState {
   menuMode?: MenuModeEnum;
   menuType?: MenuTypeEnum;
 }
+
+export interface MailInfo {
+  mail: string;
+}
+
+export interface SMSResult {
+  sms: string;
+}
+
+export interface MailSMSInfo {
+  sms: string;
+  email: string;
+}

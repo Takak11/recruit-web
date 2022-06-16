@@ -65,9 +65,6 @@
         router.push(PageEnum.BASE_LOGIN);
         setAuthCache(TOKEN_KEY, undefined);
       }
-      // if (userInformation === null || userInformation === undefined || userInformation === {}) {
-      //   router.push(PageEnum.BASE_LOGIN);
-      // }
       return { userInformation, schema };
     },
   });

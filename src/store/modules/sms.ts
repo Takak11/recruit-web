@@ -1,27 +1,24 @@
 import { defineStore } from 'pinia';
 import { store } from '..';
-import { MailInfo, SMSResult } from '/#/store';
-import { getSMSApi } from '/@/api/sys/user';
-
-interface SMSState {
-  sms: Nullable<SMSResult>;
-}
+import { MailInfo } from '/#/store';
+import { getSMSApi } from '/@/api/common/sms';
 
 export const useSMSStore = defineStore({
   id: 'app-sms',
-  state: (): SMSState => ({
-    sms: null,
+  state: () => ({
+    sms: '',
   }),
   getters: {
-    getSMSCode(): SMSResult {
-      return this.sms || { sms: '' };
+    getSMSCode: (state): any => {
+      return state.sms || '';
     },
   },
   actions: {
-    async getSMSAction(mail: MailInfo): Promise<SMSResult | null> {
-      const sms = await getSMSApi(mail);
-      this.sms = sms;
-      return sms;
+    async getSMSAction(mail: MailInfo) {
+      await getSMSApi(mail).then((res) => {
+        this.sms = res.sms;
+        return res.sms;
+      });
     },
   },
 });
