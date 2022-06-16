@@ -1,3 +1,5 @@
+import { string } from 'vue-types';
+
 /**
  * @description: Login interface parameters
  */
@@ -45,4 +47,15 @@ export interface GetUserInfoModel {
   expiredDate: string;
   // 介绍
   desc?: string;
+}
+
+export interface UserRegisterModel {
+  mobile: string;
+  mail: string;
+  name: string;
+  password: string;
+}
+
+export interface UsernameModel {
+  username: string;
 }

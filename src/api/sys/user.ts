@@ -5,6 +5,8 @@ import {
   GetUserInfoModel,
   UpdatePassworParams,
   UpdateUserParams,
+  UsernameModel,
+  UserRegisterModel,
 } from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
@@ -15,6 +17,7 @@ enum Api {
   UserInfo = '/api/recruit/user/info',
   ChangePassword = '/api/recruit/user/password',
   UpdateUserInfo = '/api/recruit/user/update',
+  Register = '/api/recruit/user/register',
 }
 
 /**
@@ -35,7 +38,7 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
 /**
  * @description: user logout api
  */
-export function logoutApi(mode: ErrorMessageMode = 'modal') {
+export function logoutApi(mode: ErrorMessageMode = 'none') {
   return defHttp.post<void>(
     {
       url: Api.Logout,
@@ -51,6 +54,18 @@ export function logoutApi(mode: ErrorMessageMode = 'modal') {
  */
 export function getUserInfo() {
   return defHttp.post<GetUserInfoModel>({ url: Api.UserInfo }, { errorMessageMode: 'none' });
+}
+
+export function register(param: UserRegisterModel, mode: ErrorMessageMode = 'modal') {
+  return defHttp.post<UsernameModel>(
+    {
+      url: Api.Register,
+      params: param,
+    },
+    {
+      errorMessageMode: mode,
+    },
+  );
 }
 
 export function changePassword(params: UpdatePassworParams, mode: ErrorMessageMode = 'modal') {

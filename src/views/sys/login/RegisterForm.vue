@@ -84,6 +84,7 @@
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
   import { useSMSStore } from '/@/store/modules/sms';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { useUserStore } from '/@/store/modules/user';
 
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
@@ -109,7 +110,7 @@
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.REGISTER);
   const smsStore = useSMSStore();
-
+  const userStore = useUserStore();
   async function sendCode() {
     if (!formData.mail) {
       createErrorModal({
@@ -134,6 +135,14 @@
         title: '错误',
         content: '验证码错误，请检查后重新提交',
       });
+
+      return;
     }
+    await userStore.register({
+      mobile: formData.mobile,
+      mail: formData.mail,
+      password: formData.password,
+      name: formData.name,
+    });
   }
 </script>

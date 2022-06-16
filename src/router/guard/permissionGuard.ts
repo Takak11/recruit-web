@@ -33,7 +33,7 @@ export function createPermissionGuard(router: Router) {
 
     // Whitelist can be directly entered
     if (whitePathList.includes(to.path as PageEnum)) {
-      if (to.path === LOGIN_PATH && token) {
+      if (to.path === LOGIN_PATH && token && token !== '') {
         const isSessionTimeout = userStore.getSessionTimeout;
         try {
           await userStore.afterLoginAction();
@@ -78,16 +78,6 @@ export function createPermissionGuard(router: Router) {
     ) {
       next(userStore.getUserInfo.homePath || PageEnum.BASE_HOME);
       return;
-    }
-
-    // get userinfo while last fetch time is empty
-    if (userStore.getLastUpdateTime === 0) {
-      try {
-        await userStore.getUserInfoAction();
-      } catch (err) {
-        next();
-        return;
-      }
     }
 
     if (permissionStore.getIsDynamicAddedRoute) {

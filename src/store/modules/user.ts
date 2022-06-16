@@ -2,7 +2,6 @@ import type { UserInfo } from '/#/store';
 import type { ErrorMessageMode } from '/#/axios';
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
-import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
 import { TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
@@ -11,8 +10,16 @@ import {
   LoginParams,
   UpdatePassworParams,
   UpdateUserParams,
+  UserRegisterModel,
 } from '/@/api/sys/model/userModel';
-import { changePassword, getUserInfo, loginApi, logoutApi, updateUserInfo } from '/@/api/sys/user';
+import {
+  changePassword,
+  getUserInfo,
+  loginApi,
+  logoutApi,
+  updateUserInfo,
+  register,
+} from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -68,6 +75,7 @@ export const useUserStore = defineStore({
     ): Promise<GetUserInfoModel | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params;
+
         const data = await loginApi(loginParams, mode);
         const { token } = data;
 
@@ -104,6 +112,8 @@ export const useUserStore = defineStore({
       await logoutApi();
       this.setToken(undefined);
       this.setUserInfo(null);
+      setAuthCache(TOKEN_KEY, undefined);
+      setAuthCache(USER_INFO_KEY, null);
       goLogin && router.push(PageEnum.BASE_LOGIN);
     },
     async updateUserInfo(
@@ -162,6 +172,31 @@ export const useUserStore = defineStore({
         onOk: async () => {
           await this.logout(true);
         },
+      });
+    },
+
+    async register(
+      param: UserRegisterModel & {
+        mode?: ErrorMessageMode;
+      },
+    ) {
+      const { createErrorModal, createSuccessModal } = useMessage();
+      await register(param).then((res) => {
+        const username = res.username;
+        if (username != '' && username != undefined) {
+          createSuccessModal({
+            title: '成功',
+            content: '注册成功！您的账号为：' + username,
+            onOk: () => {
+              window.location.href = 'https://localhost:8087/login';
+            },
+          });
+        } else {
+          createErrorModal({
+            title: '错误',
+            content: '注册失败，请联系管理员',
+          });
+        }
       });
     },
   },

@@ -38,8 +38,9 @@
         });
         if (result === true) {
           userStore.logout(true);
-
+          userStore.$state.token = '';
           router.push(PageEnum.BASE_LOGIN);
+          return;
         }
       }
 
