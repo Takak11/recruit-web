@@ -16,7 +16,11 @@
   import { getUserInfo } from '/@/api/sys/user';
   import { Description, DescItem } from '/@/components/Description/index';
   import { PageWrapper } from '/@/components/Page';
+  import { TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
+  import { PageEnum } from '/@/enums/pageEnum';
+  import { router } from '/@/router';
   import { useUserStore } from '/@/store/modules/user';
+  import { getAuthCache, setAuthCache } from '/@/utils/auth';
 
   const schema: DescItem[] = [
     {
@@ -56,6 +60,14 @@
     setup() {
       const userStore = useUserStore();
       const userInformation = userStore.getUserInfo;
+      console.log(userInformation);
+      if (getAuthCache(USER_INFO_KEY) === undefined) {
+        router.push(PageEnum.BASE_LOGIN);
+        setAuthCache(TOKEN_KEY, undefined);
+      }
+      // if (userInformation === null || userInformation === undefined || userInformation === {}) {
+      //   router.push(PageEnum.BASE_LOGIN);
+      // }
       return { userInformation, schema };
     },
   });
