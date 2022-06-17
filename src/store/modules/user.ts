@@ -8,6 +8,8 @@ import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import {
   GetUserInfoModel,
   LoginParams,
+  PasswordModel,
+  ResetPasswordModel,
   UpdatePassworParams,
   UpdateUserParams,
   UserRegisterModel,
@@ -20,6 +22,7 @@ import {
   updateUserInfo,
   register,
   loginWithMailApi,
+  resetPasswordApi,
 } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
@@ -176,6 +179,20 @@ export const useUserStore = defineStore({
         const result = data;
 
         return result;
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+
+    async resetPassword(
+      params: ResetPasswordModel & {
+        mode?: ErrorMessageMode;
+      },
+    ): Promise<PasswordModel | null> {
+      try {
+        const data = await resetPasswordApi(params);
+
+        return data;
       } catch (error) {
         return Promise.reject(error);
       }

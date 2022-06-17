@@ -54,8 +54,20 @@ export interface UserRegisterModel {
   mail: string;
   name: string;
   password: string;
+  sms: string;
 }
 
 export interface UsernameModel {
   username: string;
+}
+
+export interface ResetPasswordModel {
+  username: string;
+  password: string;
+  mail: string;
+  sms: string;
+}
+
+export interface PasswordModel {
+  password: string;
 }

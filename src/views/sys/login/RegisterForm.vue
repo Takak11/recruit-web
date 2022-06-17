@@ -118,9 +118,10 @@
         content: '请填写邮箱后发送',
       });
     }
-    const mail = formData.mail;
+    const { mail, sms } = formData;
     await smsStore.getSMSAction({
       mail: mail,
+      sms: sms,
     });
 
     return true;
@@ -128,6 +129,7 @@
   async function handleRegister() {
     const data = await validForm();
     if (!data) return;
+    const { mobile, sms, name, password, mail } = data;
     if (data.sms != smsStore.$state.sms) {
       createErrorModal({
         title: '错误',
@@ -137,10 +139,11 @@
       return;
     }
     await userStore.register({
-      mobile: formData.mobile,
-      mail: formData.mail,
-      password: formData.password,
-      name: formData.name,
+      mobile: mobile,
+      mail: mail,
+      password: password,
+      name: name,
+      sms: sms,
     });
   }
 </script>

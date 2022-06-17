@@ -95,6 +95,7 @@ export function useFormRules(formData?: Recordable) {
       case LoginStateEnum.RESET_PASSWORD:
         return {
           account: accountFormRule,
+          password: passwordFormRule,
           ...mailRule,
         };
 

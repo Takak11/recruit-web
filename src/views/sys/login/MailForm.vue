@@ -60,18 +60,19 @@
   const { createErrorModal } = useMessage();
   const userStore = useUserStore();
   const smsStore = useSMSStore();
-  const getShow = computed(() => unref(getLoginState) === LoginStateEnum.MOBILE);
+  const getShow = computed(() => unref(getLoginState) === LoginStateEnum.MAIL);
 
   async function sendCode() {
-    if (!formData.mail) {
+    const { mail, sms } = formData;
+    if (!mail) {
       createErrorModal({
         title: '错误',
         content: '请填写邮箱后发送',
       });
     }
-    const mail = formData.mail;
     await smsStore.getSMSAction({
       mail: mail,
+      sms: sms,
     });
 
     return true;

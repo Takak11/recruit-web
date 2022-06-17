@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { store } from '..';
-import { MailInfo } from '/#/store';
+import { MailSMSInfo } from '/#/store';
 import { getSMSApi } from '/@/api/common/sms';
 
 export const useSMSStore = defineStore({
@@ -14,7 +14,7 @@ export const useSMSStore = defineStore({
     },
   },
   actions: {
-    async getSMSAction(mail: MailInfo) {
+    async getSMSAction(mail: MailSMSInfo) {
       await getSMSApi(mail).then((res) => {
         this.sms = res.sms;
         return res.sms;

@@ -54,7 +54,7 @@
     </FormItem>
     <ARow class="enter-x">
       <ACol :md="12" :xs="24">
-        <Button block @click="setLoginState(LoginStateEnum.MOBILE)">
+        <Button block @click="setLoginState(LoginStateEnum.MAIL)">
           {{ t('sys.login.mobileSignInFormTitle') }}
         </Button>
       </ACol>
@@ -132,7 +132,7 @@
       const userInfo = await userStore.login({
         password: data.password,
         username: data.account,
-        mode: 'modal', //不要默认的错误提示
+        mode: 'none', //不要默认的错误提示
       });
       if (userInfo) {
         notification.success({
