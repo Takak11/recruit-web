@@ -12,6 +12,7 @@
   </PageWrapper>
 </template>
 <script lang="ts">
+  import { userInfo } from 'os';
   import { defineComponent } from 'vue';
   import { getUserInfo } from '/@/api/sys/user';
   import { Description, DescItem } from '/@/components/Description/index';
@@ -58,12 +59,10 @@
   export default defineComponent({
     components: { Description, PageWrapper },
     setup() {
-      const userStore = useUserStore();
-      const userInformation = userStore.getUserInfo;
-      if (getAuthCache(USER_INFO_KEY) === undefined) {
-        router.push(PageEnum.BASE_LOGIN);
-        setAuthCache(TOKEN_KEY, undefined);
-      }
+      console.log(getAuthCache(TOKEN_KEY));
+
+      let userInformation = getAuthCache(USER_INFO_KEY);
+      console.log(userInformation);
       return { userInformation, schema };
     },
   });

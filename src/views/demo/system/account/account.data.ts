@@ -23,15 +23,6 @@ export const columns: BasicColumn[] = [
     dataIndex: 'createTime',
     width: 180,
   },
-  {
-    title: '角色',
-    dataIndex: 'role',
-    width: 200,
-  },
-  {
-    title: '备注',
-    dataIndex: 'remark',
-  },
 ];
 
 export const searchFormSchema: FormSchema[] = [
@@ -88,20 +79,6 @@ export const accountFormSchema: FormSchema[] = [
       api: getAllRoleList,
       labelField: 'roleName',
       valueField: 'roleValue',
-    },
-    required: true,
-  },
-  {
-    field: 'dept',
-    label: '所属部门',
-    component: 'TreeSelect',
-    componentProps: {
-      fieldNames: {
-        label: 'deptName',
-        key: 'id',
-        value: 'id',
-      },
-      getPopupContainer: () => document.body,
     },
     required: true,
   },

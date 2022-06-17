@@ -126,7 +126,8 @@ export const useUserStore = defineStore({
       if (userInfo.avatar !== null) {
         userInfo.avatar = avatar;
       }
-      this.setUserInfo(userInfo);
+      this.$state.userInfo = userInfo;
+      setAuthCache(USER_INFO_KEY, userInfo);
       return userInfo;
     },
     /**
