@@ -7,7 +7,7 @@ export enum LoginStateEnum {
   LOGIN,
   REGISTER,
   RESET_PASSWORD,
-  MOBILE,
+  MAIL,
 }
 
 const currentState = ref(LoginStateEnum.LOGIN);
@@ -99,7 +99,7 @@ export function useFormRules(formData?: Recordable) {
         };
 
       // mobile form rules
-      case LoginStateEnum.MOBILE:
+      case LoginStateEnum.MAIL:
         return mailRule;
 
       // login form rules

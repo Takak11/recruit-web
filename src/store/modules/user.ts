@@ -1,4 +1,4 @@
-import type { UserInfo } from '/#/store';
+import type { MailInfo, UserInfo } from '/#/store';
 import type { ErrorMessageMode } from '/#/axios';
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
@@ -19,6 +19,7 @@ import {
   logoutApi,
   updateUserInfo,
   register,
+  loginWithMailApi,
 } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
@@ -77,6 +78,26 @@ export const useUserStore = defineStore({
         const { goHome = true, mode, ...loginParams } = params;
 
         const data = await loginApi(loginParams, mode);
+        const { token } = data;
+
+        // save token
+        this.setToken(token);
+        setAuthCache(TOKEN_KEY, this.getToken);
+        return this.afterLoginAction(goHome);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+    async loginWithMail(
+      params: MailInfo & {
+        goHome?: boolean;
+        mode?: ErrorMessageMode;
+      },
+    ): Promise<GetUserInfoModel | null> {
+      try {
+        const { goHome = true, mode, ...loginparams } = params;
+
+        const data = await loginWithMailApi(loginparams, mode);
         const { token } = data;
 
         // save token

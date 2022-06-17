@@ -60,7 +60,6 @@
     setup() {
       const userStore = useUserStore();
       const userInformation = userStore.getUserInfo;
-      console.log(userInformation);
       if (getAuthCache(USER_INFO_KEY) === undefined) {
         router.push(PageEnum.BASE_LOGIN);
         setAuthCache(TOKEN_KEY, undefined);

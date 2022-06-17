@@ -10,9 +10,11 @@ import {
 } from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
+import { MailInfo } from '/#/store';
 
 enum Api {
   Login = '/api/recruit/login',
+  LoginWithMail = '/api/recruit/login/mail',
   Logout = '/api/recruit/logout',
   UserInfo = '/api/recruit/user/info',
   ChangePassword = '/api/recruit/user/password',
@@ -27,6 +29,18 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
   return defHttp.post<LoginResultModel>(
     {
       url: Api.Login,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+    },
+  );
+}
+
+export function loginWithMailApi(params: MailInfo, mode: ErrorMessageMode = 'modal') {
+  return defHttp.post<LoginResultModel>(
+    {
+      url: Api.LoginWithMail,
       params,
     },
     {

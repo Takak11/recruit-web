@@ -128,8 +128,6 @@
   async function handleRegister() {
     const data = await validForm();
     if (!data) return;
-    console.log(data);
-    console.log(smsStore.$state.sms);
     if (data.sms != smsStore.$state.sms) {
       createErrorModal({
         title: '错误',

@@ -15,6 +15,7 @@
           size="large"
           class="fix-auto-fill"
           v-model:value="formData.sms"
+          :sendCodeApi="sendCode"
           :placeholder="t('sys.login.smsCode')"
         />
       </FormItem>
@@ -32,11 +33,14 @@
 </template>
 <script lang="ts" setup>
   import { reactive, ref, computed, unref } from 'vue';
-  import { Form, Input, Button } from 'ant-design-vue';
+  import { Form, Input, Button, notification } from 'ant-design-vue';
   import { CountdownInput } from '/@/components/CountDown';
   import LoginFormTitle from './LoginFormTitle.vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useSMSStore } from '/@/store/modules/sms';
+  import { useUserStore } from '/@/store/modules/user';
 
   const FormItem = Form.Item;
   const { t } = useI18n();
@@ -47,17 +51,54 @@
   const loading = ref(false);
 
   const formData = reactive({
-    mobile: '',
+    mail: '',
     sms: '',
   });
 
   const { validForm } = useFormValid(formRef);
 
+  const { createErrorModal } = useMessage();
+  const userStore = useUserStore();
+  const smsStore = useSMSStore();
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.MOBILE);
 
+  async function sendCode() {
+    if (!formData.mail) {
+      createErrorModal({
+        title: '错误',
+        content: '请填写邮箱后发送',
+      });
+    }
+    const mail = formData.mail;
+    await smsStore.getSMSAction({
+      mail: mail,
+    });
+
+    return true;
+  }
   async function handleLogin() {
     const data = await validForm();
     if (!data) return;
-    console.log(data);
+
+    if (data.sms != smsStore.$state.sms) {
+      createErrorModal({
+        title: '错误',
+        content: '验证码错误，请检查后重新登录',
+      });
+      return;
+    }
+    loading.value = true;
+    const userInfo = await userStore.loginWithMail({
+      mail: data.mail,
+      mode: 'modal',
+    });
+    loading.value = false;
+    if (userInfo) {
+      notification.success({
+        message: t('sys.login.loginSuccessTitle'),
+        description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.name}`,
+        duration: 3,
+      });
+    }
   }
 </script>
