@@ -173,8 +173,6 @@ export default {
     account_detail: 'Account detail',
     password: 'Change password',
 
-    dept: 'Department management',
-
     menu: 'Menu management',
     role: 'Role management',
   },

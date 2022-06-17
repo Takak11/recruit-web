@@ -123,7 +123,7 @@ export const useUserStore = defineStore({
       const userInfo = await getUserInfo();
       const avatarId = userInfo.avatar;
       const avatar = AvatarEnum.Prefix + avatarId;
-      if (userInfo.avatar !== null) {
+      if (userInfo.avatar != null) {
         userInfo.avatar = avatar;
       }
       this.$state.userInfo = userInfo;

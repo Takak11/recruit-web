@@ -1,39 +1,81 @@
+import { h } from 'vue-demi';
 import { getAllRoleList, isAccountExist } from '/@/api/demo/system';
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
+import headerImg from '/@/assets/images/header.jpg';
 
 export const columns: BasicColumn[] = [
   {
+    title: 'ID',
+    dataIndex: 'id',
+    width: 120,
+  },
+  {
+    title: '头像',
+    dataIndex: 'avatar',
+    width: 100,
+    customRender: ({ record }) => {
+      if (record.avatar != 'http://localhost:8088/api/recruit/common/rest/download/null') {
+        return h('img', { src: record.avatar });
+      } else {
+        return h('img', { src: headerImg });
+      }
+    },
+  },
+  {
     title: '用户名',
-    dataIndex: 'account',
+    dataIndex: 'username',
     width: 120,
   },
   {
     title: '昵称',
-    dataIndex: 'nickname',
+    dataIndex: 'name',
+    width: 120,
+  },
+  {
+    title: '手机号',
+    dataIndex: 'mobile',
     width: 120,
   },
   {
     title: '邮箱',
-    dataIndex: 'email',
+    dataIndex: 'mail',
     width: 120,
+  },
+  {
+    title: '性别',
+    dataIndex: 'sex',
+    width: 50,
+    customRender: ({ record }) => {
+      return record.sex === 1 ? '男' : '女';
+    },
+  },
+  {
+    title: '年龄',
+    dataIndex: 'age',
+    width: 50,
   },
   {
     title: '创建时间',
     dataIndex: 'createTime',
     width: 180,
   },
+  {
+    title: '更新时间',
+    dataIndex: 'updateTime',
+    width: 180,
+  },
 ];
 
 export const searchFormSchema: FormSchema[] = [
   {
-    field: 'account',
+    field: 'username',
     label: '用户名',
     component: 'Input',
     colProps: { span: 8 },
   },
   {
-    field: 'nickname',
+    field: 'name',
     label: '昵称',
     component: 'Input',
     colProps: { span: 8 },
@@ -42,10 +84,10 @@ export const searchFormSchema: FormSchema[] = [
 
 export const accountFormSchema: FormSchema[] = [
   {
-    field: 'account',
+    field: 'username',
     label: '用户名',
     component: 'Input',
-    helpMessage: ['本字段演示异步验证', '不能输入带有admin的用户名'],
+    helpMessage: ['用户名，用于登录'],
     rules: [
       {
         required: true,

@@ -1,6 +1,6 @@
 <template>
   <PageWrapper dense contentFullHeight fixedHeight contentClass="flex">
-    <BasicTable @register="registerTable" class="w-3/4 xl:w-4/5" :searchInfo="searchInfo">
+    <BasicTable @register="registerTable" class="w-100% xl:w-100%" :searchInfo="searchInfo">
       <template #toolbar>
         <a-button type="primary" @click="handleCreate">新增账号</a-button>
       </template>
@@ -39,12 +39,12 @@
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getAccountList } from '/@/api/demo/system';
   import { PageWrapper } from '/@/components/Page';
-
   import { useModal } from '/@/components/Modal';
   import AccountModal from './AccountModal.vue';
 
   import { columns, searchFormSchema } from './account.data';
   import { useGo } from '/@/hooks/web/usePage';
+  import { AvatarEnum } from '/@/enums/avatarPrefixEnum';
 
   export default defineComponent({
     name: 'AccountManagement',
@@ -54,8 +54,9 @@
       const [registerModal, { openModal }] = useModal();
       const searchInfo = reactive<Recordable>({});
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
+        canResize: true,
         title: '账号列表',
-        api: getAccountList,
+        api: getUserList,
         rowKey: 'id',
         columns,
         formConfig: {
@@ -78,6 +79,15 @@
         },
       });
 
+      async function getUserList() {
+        let list = await getAccountList({
+          pageNo: 1,
+          pageSize: 20,
+        });
+
+        list.records.forEach((record) => (record.avatar = AvatarEnum.Prefix + record.avatar));
+        return list;
+      }
       function handleCreate() {
         openModal(true, {
           isUpdate: false,
@@ -107,23 +117,18 @@
         }
       }
 
-      function handleSelect(deptId = '') {
-        searchInfo.deptId = deptId;
-        reload();
-      }
-
       function handleView(record: Recordable) {
-        go('/system/account_detail/' + record.id);
+        // go('/system/account_detail/' + record.id);
       }
 
       return {
+        getUserList,
         registerTable,
         registerModal,
         handleCreate,
         handleEdit,
         handleDelete,
         handleSuccess,
-        handleSelect,
         handleView,
         searchInfo,
       };

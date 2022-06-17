@@ -30,28 +30,20 @@
       dataIndex: 'no',
       editRow: true,
     },
-    {
-      title: '所属部门',
-      dataIndex: 'dept',
-      editRow: true,
-    },
   ];
 
   const data: any[] = [
     {
       name: 'John Brown',
       no: '00001',
-      dept: 'New York No. 1 Lake Park',
     },
     {
       name: 'John Brown2',
       no: '00002',
-      dept: 'New York No. 2 Lake Park',
     },
     {
       name: 'John Brown3',
       no: '00003',
-      dept: 'New York No. 3Lake Park',
     },
   ];
   export default defineComponent({
@@ -96,7 +88,6 @@
         const addRow: EditRecordRow = {
           name: '',
           no: '',
-          dept: '',
           editable: true,
           isNew: true,
           key: `${Date.now()}`,
