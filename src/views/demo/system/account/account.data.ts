@@ -3,6 +3,8 @@ import { getAllRoleList, isAccountExist } from '/@/api/demo/system';
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
 import headerImg from '/@/assets/images/header.jpg';
+import { AvatarEnum } from '/@/enums/avatarPrefixEnum';
+import { text } from 'stream/consumers';
 
 export const columns: BasicColumn[] = [
   {
@@ -15,8 +17,8 @@ export const columns: BasicColumn[] = [
     dataIndex: 'avatar',
     width: 100,
     customRender: ({ record }) => {
-      if (record.avatar != 'http://localhost:8088/api/recruit/common/rest/download/null') {
-        return h('img', { src: record.avatar });
+      if (record.avatar != null) {
+        return h('img', { src: AvatarEnum.Prefix + record.avatar });
       } else {
         return h('img', { src: headerImg });
       }
@@ -26,6 +28,7 @@ export const columns: BasicColumn[] = [
     title: '用户名',
     dataIndex: 'username',
     width: 120,
+    edit: false,
   },
   {
     title: '昵称',
@@ -72,13 +75,13 @@ export const searchFormSchema: FormSchema[] = [
     field: 'username',
     label: '用户名',
     component: 'Input',
-    colProps: { span: 8 },
+    colProps: { span: 10 },
   },
   {
     field: 'name',
     label: '昵称',
     component: 'Input',
-    colProps: { span: 8 },
+    colProps: { span: 10 },
   },
 ];
 
@@ -87,60 +90,55 @@ export const accountFormSchema: FormSchema[] = [
     field: 'username',
     label: '用户名',
     component: 'Input',
-    helpMessage: ['用户名，用于登录'],
-    rules: [
-      {
-        required: true,
-        message: '请输入用户名',
-      },
-      {
-        validator(_, value) {
-          return new Promise((resolve, reject) => {
-            isAccountExist(value)
-              .then(() => resolve())
-              .catch((err) => {
-                reject(err.message || '验证失败');
-              });
-          });
-        },
-      },
-    ],
+    show: false,
+    colProps: { span: 20 },
   },
   {
-    field: 'pwd',
-    label: '密码',
-    component: 'InputPassword',
-    required: true,
-    ifShow: false,
-  },
-  {
-    label: '角色',
-    field: 'role',
-    component: 'ApiSelect',
-    componentProps: {
-      api: getAllRoleList,
-      labelField: 'roleName',
-      valueField: 'roleValue',
-    },
-    required: true,
-  },
-  {
-    field: 'nickname',
+    field: 'name',
     label: '昵称',
     component: 'Input',
-    required: true,
+    colProps: { span: 20 },
   },
-
   {
+    field: 'mail',
     label: '邮箱',
-    field: 'email',
     component: 'Input',
-    required: true,
+    colProps: { span: 20 },
   },
-
   {
-    label: '备注',
-    field: 'remark',
-    component: 'InputTextArea',
+    field: 'mobile',
+    label: '手机号',
+    component: 'Input',
+    colProps: { span: 20 },
+  },
+  {
+    field: 'age',
+    label: '年龄',
+    component: 'Input',
+    colProps: { span: 20 },
+  },
+  {
+    field: 'password',
+    label: '密码',
+    component: 'InputPassword',
+    colProps: { span: 20 },
+  },
+  {
+    field: 'sex',
+    label: '性别',
+    component: 'Select',
+    componentProps: {
+      options: [
+        {
+          label: '男',
+          value: 1,
+        },
+        {
+          label: '女',
+          value: 0,
+        },
+      ],
+    },
+    colProps: { span: 20 },
   },
 ];

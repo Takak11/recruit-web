@@ -42,6 +42,14 @@ export interface UserInfo {
   desc?: string;
   homePath?: string;
 }
+export interface UserDetail {
+  mail: string;
+  username: string;
+  name: string;
+  mobile: string;
+  age: number;
+  sex: number;
+}
 
 export interface BeforeMiniState {
   menuCollapsed?: boolean;
@@ -57,4 +65,23 @@ export interface SMSResult {
 export interface MailSMSInfo {
   sms: string;
   mail: string;
+}
+export interface IdModel {
+  id: any;
+}
+export interface UserEditModel {
+  name: string;
+  username: string;
+  age: number;
+  sex: number;
+  mail: string;
+  mobile: string;
+}
+export interface UserAddModel {
+  name: string;
+  age: number;
+  sex: number;
+  mail: string;
+  mobile: string;
+  password: string;
 }

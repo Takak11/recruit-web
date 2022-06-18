@@ -62,7 +62,6 @@
       console.log(getAuthCache(TOKEN_KEY));
 
       let userInformation = getAuthCache(USER_INFO_KEY);
-      console.log(userInformation);
       return { userInformation, schema };
     },
   });

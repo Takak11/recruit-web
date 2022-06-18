@@ -1,4 +1,11 @@
-import type { MailInfo, UserInfo } from '/#/store';
+import type {
+  IdModel,
+  MailSMSInfo,
+  UserAddModel,
+  UserDetail,
+  UserEditModel,
+  UserInfo,
+} from '/#/store';
 import type { ErrorMessageMode } from '/#/axios';
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
@@ -23,6 +30,9 @@ import {
   register,
   loginWithMailApi,
   resetPasswordApi,
+  getUserDetailApi,
+  editUserApi,
+  addUserApi,
 } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
@@ -34,10 +44,13 @@ import { isArray } from '/@/utils/is';
 import { h } from 'vue';
 import { useMultipleTabStore } from './multipleTab';
 import { AvatarEnum } from '/@/enums/avatarPrefixEnum';
+import { resolve } from 'path/posix';
+import { reject } from 'lodash';
 
 interface UserState {
   userInfo: Nullable<UserInfo>;
   token: string;
+  profile: Object;
 }
 
 export const useUserStore = defineStore({
@@ -47,6 +60,7 @@ export const useUserStore = defineStore({
     userInfo: null,
     // token
     token: '',
+    profile: {},
   }),
   getters: {
     getUserInfo(): UserInfo {
@@ -92,7 +106,7 @@ export const useUserStore = defineStore({
       }
     },
     async loginWithMail(
-      params: MailInfo & {
+      params: MailSMSInfo & {
         goHome?: boolean;
         mode?: ErrorMessageMode;
       },
@@ -129,6 +143,41 @@ export const useUserStore = defineStore({
       this.$state.userInfo = userInfo;
       setAuthCache(USER_INFO_KEY, userInfo);
       return userInfo;
+    },
+
+    async getUserDetailAction(params: IdModel) {
+      const userDetail = await getUserDetailApi(params);
+      this.$state.profile = userDetail;
+    },
+
+    async addUserAction(
+      param: UserAddModel & {
+        mode?: ErrorMessageMode;
+      },
+    ) {
+      const { createSuccessModal, createErrorModal } = useMessage();
+      await addUserApi(param)
+        .then((res) => {
+          const username = res.username;
+          if (username != '' && username != undefined) {
+            createSuccessModal({
+              title: '成功',
+              content: '添加成功！用户名为：' + username,
+              onOk: () => {
+                router.go(0);
+              },
+            });
+          }
+        })
+        .catch((err) => {
+          createErrorModal({
+            title: '错误',
+            content: err.response.data.message,
+          });
+        });
+    },
+    async editUserAction(params: UserEditModel) {
+      await editUserApi(params);
     },
     /**
      * @description: logout

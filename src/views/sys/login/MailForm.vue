@@ -91,6 +91,7 @@
     loading.value = true;
     const userInfo = await userStore.loginWithMail({
       mail: data.mail,
+      sms: data.sms,
       mode: 'modal',
     });
     loading.value = false;

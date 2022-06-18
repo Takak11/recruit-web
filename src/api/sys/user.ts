@@ -12,7 +12,7 @@ import {
 } from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
-import { MailSMSInfo } from '/#/store';
+import { IdModel, MailSMSInfo, UserAddModel, UserDetail, UserEditModel } from '/#/store';
 
 enum Api {
   Login = '/api/recruit/login',
@@ -23,6 +23,10 @@ enum Api {
   ChangePassword = '/api/recruit/user/password',
   UpdateUserInfo = '/api/recruit/user/update',
   Register = '/api/recruit/user/register',
+  Detail = '/api/recruit/user/detail',
+  Delete = '/api/recruit/user/delete',
+  Edit = '/api/recruit/user/edit',
+  Add = '/api/recruit/user/add',
 }
 
 /**
@@ -73,6 +77,33 @@ export function getUserInfo() {
   return defHttp.post<GetUserInfoModel>({ url: Api.UserInfo }, { errorMessageMode: 'none' });
 }
 
+export function getUserDetailApi(params: IdModel) {
+  return defHttp.post<UserDetail>(
+    { url: Api.Detail, params: params },
+    { errorMessageMode: 'none' },
+  );
+}
+
+export function deleteUserApi(params: IdModel) {
+  return defHttp.post<Boolean>({
+    url: Api.Delete,
+    params: params,
+  });
+}
+
+export function editUserApi(params: UserEditModel) {
+  return defHttp.post<Boolean>({
+    url: Api.Edit,
+    params: params,
+  });
+}
+
+export function addUserApi(params: UserAddModel) {
+  return defHttp.post<UsernameModel>({
+    url: Api.Add,
+    params: params,
+  });
+}
 export function register(param: UserRegisterModel, mode: ErrorMessageMode = 'modal') {
   return defHttp.post<UsernameModel>(
     {

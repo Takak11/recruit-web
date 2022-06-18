@@ -30,7 +30,6 @@
         resetFields();
         setModalProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
-
         if (unref(isUpdate)) {
           rowId.value = data.record.id;
           setFieldsValue({
@@ -39,7 +38,7 @@
         }
         updateSchema([
           {
-            field: 'pwd',
+            field: 'password',
             show: !unref(isUpdate),
           },
         ]);

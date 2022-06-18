@@ -21,8 +21,10 @@
               icon: 'ant-design:delete-outlined',
               color: 'error',
               tooltip: '删除此账号',
+
               popConfirm: {
                 title: '是否确认删除',
+                placement: 'left',
                 confirm: handleDelete.bind(null, record),
               },
             },
@@ -45,18 +47,23 @@
   import { columns, searchFormSchema } from './account.data';
   import { useGo } from '/@/hooks/web/usePage';
   import { AvatarEnum } from '/@/enums/avatarPrefixEnum';
-
+  import { deleteUserApi } from '/@/api/sys/user';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { router } from '/@/router';
+  import { useUserStore } from '/@/store/modules/user';
   export default defineComponent({
     name: 'AccountManagement',
     components: { BasicTable, PageWrapper, AccountModal, TableAction },
     setup() {
       const go = useGo();
+      const userStore = useUserStore();
+      const { createErrorModal } = useMessage();
       const [registerModal, { openModal }] = useModal();
       const searchInfo = reactive<Recordable>({});
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
         canResize: true,
         title: '账号列表',
-        api: getUserList,
+        api: getAccountList,
         rowKey: 'id',
         columns,
         formConfig: {
@@ -79,15 +86,6 @@
         },
       });
 
-      async function getUserList() {
-        let list = await getAccountList({
-          pageNo: 1,
-          pageSize: 20,
-        });
-
-        list.records.forEach((record) => (record.avatar = AvatarEnum.Prefix + record.avatar));
-        return list;
-      }
       function handleCreate() {
         openModal(true, {
           isUpdate: false,
@@ -97,32 +95,60 @@
       function handleEdit(record: Recordable) {
         console.log(record);
         openModal(true, {
-          record,
           isUpdate: true,
+          record,
         });
       }
 
-      function handleDelete(record: Recordable) {
+      function handleDelete(record: any) {
         console.log(record);
+        const { id } = record;
+        deleteUser(id);
+      }
+      async function deleteUser(id: any) {
+        const result = await deleteUserApi({
+          id: id,
+        });
+        if (result) {
+          router.go(0);
+        }
       }
 
       function handleSuccess({ isUpdate, values }) {
+        const { name, username, sex, age, mobile, mail, password } = values;
         if (isUpdate) {
-          // 演示不刷新表格直接更新内部数据。
-          // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
-          const result = updateTableDataRecord(values.id, values);
-          console.log(result);
+          userStore.editUserAction({
+            name,
+            username,
+            sex,
+            age,
+            mobile,
+            mail,
+          });
+          router.go(0);
         } else {
-          reload();
+          userStore.addUserAction({
+            name,
+            sex,
+            age,
+            mobile,
+            mail,
+            password,
+          });
         }
       }
 
       function handleView(record: Recordable) {
-        // go('/system/account_detail/' + record.id);
+        const { id } = record;
+        const userStore = useUserStore();
+        userStore.getUserDetailAction({
+          id,
+        });
+        go(`/system/account_detail/${id}`);
       }
 
       return {
-        getUserList,
+        // getUserList,
         registerTable,
         registerModal,
         handleCreate,
