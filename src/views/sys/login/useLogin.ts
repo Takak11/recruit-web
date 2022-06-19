@@ -46,6 +46,7 @@ export function useFormRules(formData?: Recordable) {
   const getMobileFormRule = computed(() => createRule(t('sys.login.mobilePlaceholder')));
   const getMailFormRule = computed(() => createRule(t('sys.login.mailPlaceholder')));
   const getSmsFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
+  const getVerifyRule = computed(() => createRule(t('sys.login.verifyPlaceholder')));
 
   const validatePolicy = async (_: RuleObject, value: boolean) => {
     return !value ? Promise.reject(t('sys.login.policyPlaceholder')) : Promise.resolve();
@@ -72,6 +73,7 @@ export function useFormRules(formData?: Recordable) {
     const mailFormRule = unref(getMailFormRule);
     const nameFormRule = unref(getNameFormRule);
 
+    const verifyRule = unref(getVerifyRule);
     const mailRule = {
       sms: smsFormRule,
       mail: mailFormRule,
@@ -108,6 +110,7 @@ export function useFormRules(formData?: Recordable) {
         return {
           account: accountFormRule,
           password: passwordFormRule,
+          verify: verifyRule,
         };
     }
   });

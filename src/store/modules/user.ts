@@ -268,7 +268,7 @@ export const useUserStore = defineStore({
         mode?: ErrorMessageMode;
       },
     ) {
-      const { createErrorModal, createSuccessModal } = useMessage();
+      const { createSuccessModal } = useMessage();
       await register(param).then((res) => {
         const username = res.username;
         if (username != '' && username != undefined) {
@@ -278,11 +278,6 @@ export const useUserStore = defineStore({
             onOk: () => {
               window.location.href = 'https://localhost:8087/login';
             },
-          });
-        } else {
-          createErrorModal({
-            title: '错误',
-            content: '注册失败，请联系管理员',
           });
         }
       });

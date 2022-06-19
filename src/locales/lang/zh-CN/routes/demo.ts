@@ -164,6 +164,7 @@ export default {
   system: {
     moduleName: '系统管理',
     account: '用户管理',
+    resume: '简历管理',
     account_detail: '账号详情',
     password: '修改密码',
     menu: '菜单管理',

@@ -87,6 +87,7 @@ export default {
     smsPlaceholder: '请输入验证码',
     mobilePlaceholder: '请输入手机号码',
     mailPlaceholder: '请输入邮箱号码',
+    verifyPlaceholder: '请通过滑块校验',
     policyPlaceholder: '勾选后才能注册',
     diffPwd: '两次输入密码不一致',
 

@@ -18,6 +18,8 @@
   import { useUserStore } from '/@/store/modules/user';
   import { router } from '/@/router';
   import { PageEnum } from '/@/enums/pageEnum';
+  import { setAuthCache } from '/@/utils/auth';
+  import { TOKEN_KEY } from '/@/enums/cacheEnum';
   export default defineComponent({
     name: 'ChangePassword',
     components: { BasicForm, PageWrapper },
@@ -37,9 +39,12 @@
           newPassword: values.passwordNew,
         });
         if (result === true) {
-          userStore.logout(true);
-          userStore.$state.token = '';
-          router.push(PageEnum.BASE_LOGIN);
+          userStore
+            .logout(true)
+            .then(
+              () =>
+                (window.location.href = 'https://localhost:8087/login?redirect=/dashbord/password'),
+            );
           return;
         }
       }

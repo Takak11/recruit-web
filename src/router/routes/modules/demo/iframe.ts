@@ -8,7 +8,6 @@ const iframe: AppRouteModule = {
   path: '/project',
   name: 'Frame',
   component: LAYOUT,
-  redirect: '/project/doc',
   meta: {
     orderNo: 10,
     icon: 'ion:tv-outline',

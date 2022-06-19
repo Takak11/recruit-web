@@ -4,7 +4,7 @@
       :maxSize="20"
       :maxNumber="10"
       @change="handleUpload"
-      :api="uploadApi"
+      :api="uploadResumeApi"
       class="my-5"
     />
     <div>
@@ -19,7 +19,7 @@
   import { MarkDown, MarkDownActionType, MarkdownViewer } from '/@/components/Markdown';
   import { PageWrapper } from '/@/components/Page';
   import { Alert, Card } from 'ant-design-vue';
-  import { uploadApi } from '/@/api/sys/upload';
+  import { uploadApi, uploadResumeApi } from '/@/api/sys/upload';
   import { BasicUpload } from '/@/components/Upload';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { FormSchema, useForm } from '/@/components/Form';
@@ -34,7 +34,7 @@
       },
       rules: [{ required: true, message: '请选择上传文件' }],
       componentProps: {
-        api: uploadApi,
+        api: uploadResumeApi,
       },
     },
   ];
@@ -67,6 +67,7 @@
         handleUpload: () => {
           createMessage.info(`上传成功`);
         },
+        uploadResumeApi,
         handleChange,
         uploadApi,
         register,

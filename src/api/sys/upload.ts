@@ -7,6 +7,7 @@ const { uploadUrl = '' } = useGlobSetting();
 
 enum Api {
   UploadAvatar = '/basic-api/api/recruit/user/avatar',
+  UploadResume = '/basic-api/api/recruit/resume/add',
 }
 /**
  * @description: Upload interface
@@ -18,6 +19,18 @@ export function uploadApi(
   return defHttp.uploadFile<UploadApiResult>(
     {
       url: uploadUrl,
+      onUploadProgress,
+    },
+    params,
+  );
+}
+export function uploadResumeApi(
+  params: UploadFileParams,
+  onUploadProgress: (progressEvent: ProgressEvent) => void,
+) {
+  return defHttp.uploadFile<Boolean>(
+    {
+      url: Api.UploadResume,
       onUploadProgress,
     },
     params,

@@ -24,7 +24,16 @@
         :placeholder="t('sys.login.password')"
       />
     </FormItem>
-
+    <FormItem class="enter-x" name="verify">
+      <BasicDragVerify
+        ref="el1"
+        @success="handleSuccess"
+        :width="400"
+        :barStyle="{
+          backgroundColor: '#018ffb',
+        }"
+      />
+    </FormItem>
     <ARow class="enter-x">
       <ACol :span="12">
         <FormItem>
@@ -89,12 +98,13 @@
   } from '@ant-design/icons-vue';
   import LoginFormTitle from './LoginFormTitle.vue';
 
+  import { BasicDragVerify } from '/@/components/Verify/index';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
-
   import { useUserStore } from '/@/store/modules/user';
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { DragVerifyActionType } from '/@/components/Verify';
   //import { onKeyStroke } from '@vueuse/core';
 
   const ACol = Col;
@@ -116,12 +126,19 @@
   const formData = reactive({
     account: '87449034@qq.com',
     password: '111111',
+    verify: undefined,
   });
 
+  const el1 = ref<Nullable<DragVerifyActionType>>(null);
   const { validForm } = useFormValid(formRef);
-
+  const { createMessage } = useMessage();
   //onKeyStroke('Enter', handleLogin);
 
+  function handleSuccess(data: PassingData) {
+    const { time } = data;
+    formData.verify = true;
+    createMessage.success(`校验成功,耗时${time}秒`);
+  }
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
 
   async function handleLogin() {

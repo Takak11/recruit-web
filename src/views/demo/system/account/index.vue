@@ -8,6 +8,11 @@
         <TableAction
           :actions="[
             {
+              icon: 'ant-design:eye-outlined',
+              tooltip: '查看用户简历',
+              onClick: handleViewResume.bind(null, record),
+            },
+            {
               icon: 'clarity:info-standard-line',
               tooltip: '查看用户详情',
               onClick: handleView.bind(null, record),
@@ -79,7 +84,7 @@
           return info;
         },
         actionColumn: {
-          width: 120,
+          width: 150,
           title: '操作',
           dataIndex: 'action',
           slots: { customRender: 'action' },
@@ -140,13 +145,17 @@
 
       function handleView(record: Recordable) {
         const { id } = record;
-        const userStore = useUserStore();
+
         userStore.getUserDetailAction({
           id,
         });
         go(`/system/account_detail/${id}`);
       }
 
+      function handleViewResume(record: Recordable) {
+        const { id } = record;
+        window.open(`http://localhost:8088/api/recruit/common/resume/${id}`);
+      }
       return {
         // getUserList,
         registerTable,
@@ -156,6 +165,7 @@
         handleDelete,
         handleSuccess,
         handleView,
+        handleViewResume,
         searchInfo,
       };
     },

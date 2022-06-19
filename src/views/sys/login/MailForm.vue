@@ -94,7 +94,6 @@
       sms: data.sms,
       mode: 'modal',
     });
-    loading.value = false;
     if (userInfo) {
       notification.success({
         message: t('sys.login.loginSuccessTitle'),

@@ -27,6 +27,7 @@ enum Api {
   Delete = '/api/recruit/user/delete',
   Edit = '/api/recruit/user/edit',
   Add = '/api/recruit/user/add',
+  Resume = '/api/recruit/common/resume',
 }
 
 /**
